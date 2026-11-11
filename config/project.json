@@ -1,0 +1,16 @@
+{
+  "project": "Smart Agriculture Data Analytics Platform",
+  "version": "1.0",
+  "executed_records": {
+    "crop_production": 49999,
+    "crop_recommendation": 2200
+  },
+  "frameworks": [
+    "Python",
+    "PySpark",
+    "Spark MLlib",
+    "Streamlit",
+    "Plotly",
+    "Parquet"
+  ]
+}

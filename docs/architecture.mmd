@@ -1,0 +1,16 @@
+flowchart LR
+  A[CATCrops / Indian agriculture sources] --> B[Ingestion: CSV, HDF5, Shapefile]
+  B --> C[HDFS raw zone]
+  C --> D[Spark / PySpark preprocessing]
+  D --> E[Parquet curated zone]
+  E --> F1[K-Means clustering]
+  E --> F2[Random Forest classification]
+  E --> F3[Yield regression]
+  F1 --> G[Streamlit + Plotly dashboard]
+  F2 --> G
+  F3 --> G
+  G --> H[CSV downloads / report metrics]
+  style A fill:#e8f5e9,stroke:#2e7d32
+  style C fill:#dcedc8,stroke:#33691e
+  style D fill:#c8e6c9,stroke:#1b5e20
+  style G fill:#a5d6a7,stroke:#1b5e20
