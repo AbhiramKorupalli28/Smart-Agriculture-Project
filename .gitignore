@@ -39,3 +39,8 @@ env/
 # OS files
 .DS_Store
 Thumbs.db
+
+# Reports and documents
+*.docx
+*.pdf
+Mini_Case_Study_Report.*
