@@ -23,36 +23,121 @@ st.set_page_config(
 # THEME CONFIGURATION
 # -------------------------------------------------------------
 st.sidebar.markdown('### 🌱 System Settings')
-theme_choice = st.sidebar.selectbox('Theme Mode', ['Dark Tech Obsidian', 'Clean Light Green'], index=0)
+theme_choice = st.sidebar.selectbox(
+    'Theme Mode',
+    [
+        '🌿 Emerald AgriTech (Vibrant Dark)',
+        '🌾 Golden Harvest (Amber & Slate)',
+        '🌌 Cyber Midnight (Neon & Blue)',
+        '☀️ Clean Modern Porcelain (Light)'
+    ],
+    index=0
+)
 
-if theme_choice == 'Dark Tech Obsidian':
-    bg_gradient = 'linear-gradient(180deg, #0b0f12 0%, #0d1418 100%)'
-    sidebar_bg = '#0e171b'
-    text_color = '#f1f5f9'
-    accent_green = '#10b981'
+if theme_choice == '🌿 Emerald AgriTech (Vibrant Dark)':
+    bg_gradient = 'linear-gradient(180deg, #06140e 0%, #0a1f16 50%, #06120b 100%)'
+    sidebar_bg = '#081a12'
+    sidebar_border = 'rgba(16, 185, 129, 0.28)'
+    text_color = '#f8fafc'
+    accent_primary = '#10b981'
+    accent_secondary = '#f59e0b'
     accent_cyan = '#06b6d4'
-    title_color = '#34d399'
+    title_gradient = 'linear-gradient(135deg, #34d399 0%, #10b981 40%, #fbbf24 100%)'
     caption_color = '#94a3b8'
     kpi_bg = 'rgba(16, 185, 129, 0.08)'
-    kpi_border = 'rgba(16, 185, 129, 0.25)'
+    kpi_border = 'rgba(52, 211, 153, 0.25)'
     kpi_num = '#ffffff'
     kpi_label = '#94a3b8'
+    radio_card_bg = 'rgba(255, 255, 255, 0.03)'
+    radio_card_border = 'rgba(16, 185, 129, 0.16)'
+    radio_hover_bg = 'rgba(16, 185, 129, 0.14)'
+    radio_selected_bg = 'linear-gradient(90deg, rgba(16, 185, 129, 0.25) 0%, rgba(16, 185, 129, 0.10) 100%)'
+    glow_color = 'rgba(16, 185, 129, 0.35)'
+    badge_bg = 'rgba(16, 185, 129, 0.14)'
+    badge_border = 'rgba(16, 185, 129, 0.32)'
     chart_font = '#e2e8f0'
     plotly_template = 'plotly_dark'
+    map_ocean = '#06140e'
+    map_land = '#0f291e'
+    map_country = '#10b981'
+elif theme_choice == '🌾 Golden Harvest (Amber & Slate)':
+    bg_gradient = 'linear-gradient(180deg, #130e09 0%, #1c150d 50%, #100b07 100%)'
+    sidebar_bg = '#181109'
+    sidebar_border = 'rgba(245, 158, 11, 0.28)'
+    text_color = '#fafaf9'
+    accent_primary = '#f59e0b'
+    accent_secondary = '#10b981'
+    accent_cyan = '#fb923c'
+    title_gradient = 'linear-gradient(135deg, #fcd34d 0%, #f59e0b 50%, #f97316 100%)'
+    caption_color = '#a8a29e'
+    kpi_bg = 'rgba(245, 158, 11, 0.08)'
+    kpi_border = 'rgba(245, 158, 11, 0.25)'
+    kpi_num = '#ffffff'
+    kpi_label = '#d6d3d1'
+    radio_card_bg = 'rgba(255, 255, 255, 0.03)'
+    radio_card_border = 'rgba(245, 158, 11, 0.18)'
+    radio_hover_bg = 'rgba(245, 158, 11, 0.14)'
+    radio_selected_bg = 'linear-gradient(90deg, rgba(245, 158, 11, 0.25) 0%, rgba(245, 158, 11, 0.10) 100%)'
+    glow_color = 'rgba(245, 158, 11, 0.35)'
+    badge_bg = 'rgba(245, 158, 11, 0.14)'
+    badge_border = 'rgba(245, 158, 11, 0.32)'
+    chart_font = '#fafaf9'
+    plotly_template = 'plotly_dark'
+    map_ocean = '#130e09'
+    map_land = '#241a10'
+    map_country = '#f59e0b'
+elif theme_choice == '🌌 Cyber Midnight (Neon & Blue)':
+    bg_gradient = 'linear-gradient(180deg, #090e1c 0%, #0e172e 50%, #070b16 100%)'
+    sidebar_bg = '#0c1326'
+    sidebar_border = 'rgba(56, 189, 248, 0.28)'
+    text_color = '#f8fafc'
+    accent_primary = '#00f59b'
+    accent_secondary = '#38bdf8'
+    accent_cyan = '#a855f7'
+    title_gradient = 'linear-gradient(135deg, #38bdf8 0%, #00f59b 50%, #c084fc 100%)'
+    caption_color = '#94a3b8'
+    kpi_bg = 'rgba(56, 189, 248, 0.08)'
+    kpi_border = 'rgba(0, 245, 155, 0.25)'
+    kpi_num = '#ffffff'
+    kpi_label = '#94a3b8'
+    radio_card_bg = 'rgba(255, 255, 255, 0.03)'
+    radio_card_border = 'rgba(56, 189, 248, 0.18)'
+    radio_hover_bg = 'rgba(56, 189, 248, 0.14)'
+    radio_selected_bg = 'linear-gradient(90deg, rgba(0, 245, 155, 0.25) 0%, rgba(56, 189, 248, 0.12) 100%)'
+    glow_color = 'rgba(0, 245, 155, 0.35)'
+    badge_bg = 'rgba(0, 245, 155, 0.14)'
+    badge_border = 'rgba(0, 245, 155, 0.32)'
+    chart_font = '#e2e8f0'
+    plotly_template = 'plotly_dark'
+    map_ocean = '#090e1c'
+    map_land = '#141f3b'
+    map_country = '#38bdf8'
 else:
-    bg_gradient = '#f4f8f4'
-    sidebar_bg = '#eaf2ea'
-    text_color = '#1f2937'
-    accent_green = '#15803d'
+    bg_gradient = 'linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)'
+    sidebar_bg = '#ffffff'
+    sidebar_border = 'rgba(5, 150, 105, 0.25)'
+    text_color = '#0f172a'
+    accent_primary = '#059669'
+    accent_secondary = '#d97706'
     accent_cyan = '#0284c7'
-    title_color = '#166534'
-    caption_color = '#4b5563'
+    title_gradient = 'linear-gradient(135deg, #047857 0%, #065f46 50%, #d97706 100%)'
+    caption_color = '#475569'
     kpi_bg = '#ffffff'
-    kpi_border = '#cbd5e1'
-    kpi_num = '#111827'
-    kpi_label = '#4b5563'
-    chart_font = '#1f2937'
+    kpi_border = 'rgba(5, 150, 105, 0.22)'
+    kpi_num = '#0f172a'
+    kpi_label = '#475569'
+    radio_card_bg = '#ffffff'
+    radio_card_border = 'rgba(0, 0, 0, 0.08)'
+    radio_hover_bg = 'rgba(5, 150, 105, 0.08)'
+    radio_selected_bg = 'rgba(5, 150, 105, 0.14)'
+    glow_color = 'rgba(5, 150, 105, 0.22)'
+    badge_bg = 'rgba(5, 150, 105, 0.10)'
+    badge_border = 'rgba(5, 150, 105, 0.28)'
+    chart_font = '#0f172a'
     plotly_template = 'plotly_white'
+    map_ocean = '#e0f2fe'
+    map_land = '#f8fafc'
+    map_country = '#059669'
 
 st.markdown(f'''
 <style>
@@ -62,52 +147,126 @@ st.markdown(f'''
 }}
 [data-testid="stSidebar"] {{
     background-color: {sidebar_bg} !important;
-    border-right: 1px solid rgba(16, 185, 129, 0.2) !important;
+    border-right: 1px solid {sidebar_border} !important;
+    min-width: 330px !important;
+    max-width: 360px !important;
 }}
+[data-testid="stSidebar"] > div:first-child {{
+    padding-top: 1.4rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}}
+
+/* Radio Group Container */
+[data-testid="stRadio"] div[role="radiogroup"] {{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 7px !important;
+}}
+
+/* Radio Option Cards (Fixes wrapping and misalignment) */
+[data-testid="stRadio"] label[data-baseweb="radio"] {{
+    background: {radio_card_bg} !important;
+    border: 1px solid {radio_card_border} !important;
+    border-radius: 9px !important;
+    padding: 8px 12px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+}}
+
+[data-testid="stRadio"] label[data-baseweb="radio"]:hover {{
+    background: {radio_hover_bg} !important;
+    border-color: {accent_primary} !important;
+    transform: translateX(4px) !important;
+}}
+
+/* Active/Checked Radio Option */
+[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) {{
+    background: {radio_selected_bg} !important;
+    border: 1.5px solid {accent_primary} !important;
+    box-shadow: 0 0 14px {glow_color} !important;
+}}
+
+[data-testid="stRadio"] label[data-baseweb="radio"] p {{
+    font-size: 0.90rem !important;
+    font-weight: 550 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    color: {text_color} !important;
+    margin: 0 !important;
+    letter-spacing: -0.2px !important;
+}}
+
+[data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) p {{
+    font-weight: 700 !important;
+    color: {accent_primary} !important;
+}}
+
+/* Radio circular dot alignment */
+[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {{
+    margin-right: 8px !important;
+    flex-shrink: 0 !important;
+}}
+
 .main-title {{
-    color: {title_color} !important;
+    background: {title_gradient};
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     font-size: 2.3rem;
     font-weight: 800;
-    margin-bottom: 0.1rem;
+    margin-bottom: 0.2rem;
     letter-spacing: -0.5px;
 }}
 .sub-caption {{
     color: {caption_color} !important;
-    font-size: 1rem;
-    margin-bottom: 1.4rem;
+    font-size: 0.95rem;
+    margin-bottom: 1.3rem;
 }}
 .badge-pill {{
     display: inline-block;
-    padding: 4px 12px;
+    padding: 5px 13px;
     border-radius: 9999px;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     font-weight: 600;
-    background: rgba(16, 185, 129, 0.15);
-    color: {accent_green};
-    border: 1px solid rgba(16, 185, 129, 0.3);
+    background: {badge_bg};
+    color: {accent_primary};
+    border: 1px solid {badge_border};
     margin-right: 8px;
     margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }}
 .kpi {{
     background: {kpi_bg} !important;
-    border: 1px solid {kpi_border};
-    border-left: 5px solid {accent_green} !important;
+    border: 1px solid {kpi_border} !important;
+    border-left: 5px solid {accent_primary} !important;
     padding: 16px 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    margin-bottom: 12px;
-    backdrop-filter: blur(8px);
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+    margin-bottom: 14px;
+    backdrop-filter: blur(10px);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}}
+.kpi:hover {{
+    transform: translateY(-2px);
+    box-shadow: 0 10px 26px {glow_color};
 }}
 .kpi h2 {{
     color: {kpi_num} !important;
-    font-size: 1.85rem;
+    font-size: 1.95rem;
     font-weight: 800;
     margin: 0;
+    letter-spacing: -0.5px;
 }}
 .kpi div {{
     color: {kpi_label} !important;
     font-size: 0.88rem;
-    margin-top: 4px;
+    font-weight: 500;
+    margin-top: 5px;
 }}
 </style>
 ''', unsafe_allow_html=True)
@@ -150,14 +309,14 @@ st.sidebar.markdown('### 🧭 Navigation')
 page = st.sidebar.radio(
     'Go to',
     [
-        'Executive Command Center',
-        '⚡ Big Data Engine & Spark Benchmarks',
+        '📊 Executive Command Center',
+        '⚡ Big Data & Spark Engine',
         '🗺️ Geospatial Farm Explorer',
-        '💧 Smart IoT Irrigation & Weather Radar',
+        '💧 Smart IoT Irrigation Radar',
         '🎯 Precision Crop Recommender',
-        '🤖 ML Model Evaluation Arena',
+        '🤖 ML Model Arena',
         '🧪 Soil & Nutrient Analytics',
-        '📈 Crop Yield & Seasonal Analysis',
+        '📈 Crop Yield & Seasonal Trends',
         '🧬 K-Means Pattern Clusters',
         '🏛️ Distributed Architecture & HDFS'
     ]
@@ -178,7 +337,7 @@ st.markdown(f'''
 # -------------------------------------------------------------
 # 1. EXECUTIVE COMMAND CENTER
 # -------------------------------------------------------------
-if page == 'Executive Command Center':
+if page == '📊 Executive Command Center':
     st.subheader('📊 Global Telemetry & Platform Overview')
     c1, c2, c3, c4 = st.columns(4)
     total_recs = 3246188
@@ -223,7 +382,7 @@ if page == 'Executive Command Center':
 # -------------------------------------------------------------
 # 2. BIG DATA ENGINE & SPARK BENCHMARKS (1.2 GB KAGGLE CENSUS)
 # -------------------------------------------------------------
-elif page == '⚡ Big Data Engine & Spark Benchmarks':
+elif page == '⚡ Big Data & Spark Engine':
     st.subheader('⚡ Multi-Gigabyte Apache Spark Distributed Benchmark')
     st.markdown('''
     This module validates distributed Big Data execution on the **1.20 GB official USDA Agricultural Production Census dataset** 
@@ -343,10 +502,10 @@ elif page == '🗺️ Geospatial Farm Explorer':
         center=dict(lat=21.5, lon=78.9),
         projection_scale=3.8,
         showcountries=True,
-        countrycolor='#475569',
+        countrycolor=map_country,
         showocean=True,
-        oceancolor='#091117' if theme_choice == 'Dark Tech Obsidian' else '#e0f2fe',
-        landcolor='#111c24' if theme_choice == 'Dark Tech Obsidian' else '#f8fafc'
+        oceancolor=map_ocean,
+        landcolor=map_land
     )
     render_chart(fig, height=520)
 
@@ -356,7 +515,7 @@ elif page == '🗺️ Geospatial Farm Explorer':
 # -------------------------------------------------------------
 # 4. SMART IOT IRRIGATION & WEATHER RADAR
 # -------------------------------------------------------------
-elif page == '💧 Smart IoT Irrigation & Weather Radar':
+elif page == '💧 Smart IoT Irrigation Radar':
     st.subheader('💧 Precision IoT Farm Telemetry & Automated Irrigation AI')
     st.markdown('Simulate real-time smart farm IoT telemetry nodes to trigger AI irrigation decisions and calculate dynamic water conservation.')
 
@@ -482,7 +641,7 @@ elif page == '🎯 Precision Crop Recommender':
 # -------------------------------------------------------------
 # 6. ML MODEL EVALUATION ARENA
 # -------------------------------------------------------------
-elif page == '🤖 ML Model Evaluation Arena':
+elif page == '🤖 ML Model Arena':
     st.subheader('🤖 Machine Learning Model Benchmarking & Explainable AI')
     st.markdown('Inspect model evaluation metrics across Random Forest, K-Means Clustering, and Feature Importances.')
 
@@ -539,7 +698,7 @@ elif page == '🧪 Soil & Nutrient Analytics':
 # -------------------------------------------------------------
 # 8. CROP YIELD & SEASONAL ANALYSIS
 # -------------------------------------------------------------
-elif page == '📈 Crop Yield & Seasonal Analysis':
+elif page == '📈 Crop Yield & Seasonal Trends':
     st.subheader('📈 Regional Crop Yield per Hectare & Seasonal Variations')
     filtered = prod.dropna(subset=['Yield per Area']).query('`Yield per Area` < `Yield per Area`.quantile(0.98)')
     fig = px.box(
