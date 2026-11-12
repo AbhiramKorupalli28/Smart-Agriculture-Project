@@ -26,15 +26,41 @@ st.sidebar.markdown('### 🌱 System Settings')
 theme_choice = st.sidebar.selectbox(
     'Theme Mode',
     [
+        '🌌 Cyber Midnight (Neon & Blue)',
         '🌿 Emerald AgriTech (Vibrant Dark)',
         '🌾 Golden Harvest (Amber & Slate)',
-        '🌌 Cyber Midnight (Neon & Blue)',
         '☀️ Clean Modern Porcelain (Light)'
     ],
     index=0
 )
 
-if theme_choice == '🌿 Emerald AgriTech (Vibrant Dark)':
+if theme_choice == '🌌 Cyber Midnight (Neon & Blue)':
+    bg_gradient = 'linear-gradient(180deg, #090e1c 0%, #0e172e 50%, #070b16 100%)'
+    sidebar_bg = '#0c1326'
+    sidebar_border = 'rgba(56, 189, 248, 0.28)'
+    text_color = '#f8fafc'
+    accent_primary = '#00f59b'
+    accent_secondary = '#38bdf8'
+    accent_cyan = '#a855f7'
+    title_gradient = 'linear-gradient(135deg, #38bdf8 0%, #00f59b 50%, #c084fc 100%)'
+    caption_color = '#94a3b8'
+    kpi_bg = 'rgba(56, 189, 248, 0.08)'
+    kpi_border = 'rgba(0, 245, 155, 0.25)'
+    kpi_num = '#ffffff'
+    kpi_label = '#94a3b8'
+    radio_card_bg = 'rgba(255, 255, 255, 0.03)'
+    radio_card_border = 'rgba(56, 189, 248, 0.18)'
+    radio_hover_bg = 'rgba(56, 189, 248, 0.14)'
+    radio_selected_bg = 'linear-gradient(90deg, rgba(0, 245, 155, 0.25) 0%, rgba(56, 189, 248, 0.12) 100%)'
+    glow_color = 'rgba(0, 245, 155, 0.35)'
+    badge_bg = 'rgba(0, 245, 155, 0.14)'
+    badge_border = 'rgba(0, 245, 155, 0.32)'
+    chart_font = '#e2e8f0'
+    plotly_template = 'plotly_dark'
+    map_ocean = '#090e1c'
+    map_land = '#141f3b'
+    map_country = '#38bdf8'
+elif theme_choice == '🌿 Emerald AgriTech (Vibrant Dark)':
     bg_gradient = 'linear-gradient(180deg, #06140e 0%, #0a1f16 50%, #06120b 100%)'
     sidebar_bg = '#081a12'
     sidebar_border = 'rgba(16, 185, 129, 0.28)'
@@ -169,13 +195,15 @@ st.markdown(f'''
     background: {radio_card_bg} !important;
     border: 1px solid {radio_card_border} !important;
     border-radius: 9px !important;
-    padding: 8px 12px !important;
+    padding: 9px 13px !important;
     margin: 0 !important;
     width: 100% !important;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
     cursor: pointer !important;
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
+    vertical-align: middle !important;
 }}
 
 [data-testid="stRadio"] label[data-baseweb="radio"]:hover {{
@@ -191,26 +219,46 @@ st.markdown(f'''
     box-shadow: 0 0 14px {glow_color} !important;
 }}
 
+/* Radio circular dot alignment */
+[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {{
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 10px 0 0 !important;
+    padding: 0 !important;
+    flex-shrink: 0 !important;
+    align-self: center !important;
+    line-height: 1 !important;
+}}
+
+[data-testid="stRadio"] label[data-baseweb="radio"] div[data-testid="stMarkdownContainer"] {{
+    display: inline-flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    align-self: center !important;
+    line-height: 1 !important;
+}}
+
 [data-testid="stRadio"] label[data-baseweb="radio"] p {{
     font-size: 0.90rem !important;
     font-weight: 550 !important;
+    line-height: 1.2 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
     text-overflow: ellipsis !important;
     color: {text_color} !important;
     margin: 0 !important;
+    padding: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    vertical-align: middle !important;
     letter-spacing: -0.2px !important;
 }}
 
 [data-testid="stRadio"] label[data-baseweb="radio"]:has(input:checked) p {{
     font-weight: 700 !important;
     color: {accent_primary} !important;
-}}
-
-/* Radio circular dot alignment */
-[data-testid="stRadio"] label[data-baseweb="radio"] > div:first-child {{
-    margin-right: 8px !important;
-    flex-shrink: 0 !important;
 }}
 
 .main-title {{
