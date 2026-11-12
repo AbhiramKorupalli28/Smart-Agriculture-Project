@@ -45,6 +45,16 @@ Thumbs.db
 *.pdf
 Mini_Case_Study_Report.*
 
+# Streamlit & UI local configs (kept locally, excluded from GitHub)
+.streamlit/
+dashboard/
+
+# Local output directories & configurations (kept locally, excluded from GitHub)
+outputs/
+output/
+config/
+/scripts/
+
 # Large Big Data Files (>100MB)
 data/raw/agricultural_production*
 data/raw/iot_telemetry*
@@ -52,5 +62,6 @@ data/raw/bigdata*
 data/processed/bigdata*
 *.parquet.crc
 .*.crc
+
 
 

@@ -86,7 +86,7 @@ Models were evaluated using an 80/20 train/test holdout with cross-validation:
 
 ## 6. System Architecture & Web Dashboard
 
-The web platform runs a multi-module Streamlit analytics application (`dashboard/app.py`):
+The web platform runs a multi-module Streamlit analytics application (`src/app.py`):
 1. **Executive Command Center:** High-level platform KPIs, production trends, and crop distribution charts.
 2. **Big Data & Spark Engine:** Live 1.20 GB dataset telemetry, Spark vs Pandas runtime benchmarks, and Parquet data querying.
 3. **Geospatial Farm Explorer:** Interactive mapping of major Indian agro-climatic zones and soil health indices.

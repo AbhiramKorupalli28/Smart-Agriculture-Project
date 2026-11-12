@@ -26,8 +26,6 @@ We used the **USDA Agricultural Production Census** from Kaggle, alongside the *
 
 ```
 Smart-Agriculture-Project/
-├── dashboard/      # Interactive web application
-│   └── app.py
 ├── data/           # Dataset information and raw/processed records
 │   ├── processed/
 │   │   └── spark/
@@ -45,15 +43,10 @@ Smart-Agriculture-Project/
 │       ├── iot_irrigation_radar.png
 │       ├── crop_recommender.png
 │       └── evaluation_results.png
-├── outputs/        # Machine learning models, benchmarks, and figures
-│   ├── figures/
-│   ├── models/
-│   ├── metrics.json
-│   └── spark_benchmark.json
 ├── reports/        # Final project report and documentation
 │   ├── final_report.md
 │   └── Dataset_Inventory.xlsx
-├── results/        # Spark analytical outputs and query results
+├── results/        # Spark analytical outputs and query results (1-9 CSVs)
 │   ├── 1_total_records.csv
 │   ├── 2_top_cultivated_crops.csv
 │   ├── 3_state_production_summary.csv
@@ -63,10 +56,14 @@ Smart-Agriculture-Project/
 │   ├── 7_model_evaluation_metrics.csv
 │   ├── 8_spark_benchmark_comparison.csv
 │   └── 9_iot_irrigation_thresholds.csv
-├── src/            # Python data processing scripts and PySpark engines
+├── src/            # Python data processing scripts, UI, and PySpark engines
 │   ├── __init__.py
+│   ├── app.py
 │   ├── pipeline.py
-│   └── spark_job.py
+│   ├── spark_job.py
+│   └── scripts/
+│       ├── create_documents.py
+│       └── hdfs_setup.sh
 ├── requirements.txt
 ├── .gitignore
 └── README.md       # Project overview, results, and instructions
@@ -163,6 +160,6 @@ Smart-Agriculture-Project/
 
 3. Launch the interactive Streamlit web dashboard:
    ```bash
-   streamlit run dashboard/app.py
+   streamlit run src/app.py
    ```
    Open **http://localhost:8501** in your browser.
