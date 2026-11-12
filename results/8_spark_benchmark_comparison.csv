@@ -1,0 +1,4 @@
+stage,pyspark_12_cores_sec,pandas_single_thread_sec,speedup
+Raw Ingestion,2.59,18.42,7.11x
+Distributed Aggregations & Write,36.99,168.4,4.55x
+Processing Throughput,"86,354 rec/s","~18,900 rec/s",4.57x

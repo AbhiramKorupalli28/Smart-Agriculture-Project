@@ -1,0 +1,5 @@
+dataset,rows,columns,size_mb,role
+USDA Agricultural Production Census (Kaggle),3193989,39,1146.7,Big Data census benchmarking
+Indian Crop Prediction Dataset,49999,10,3.1,Yield & seasonal analysis
+Crop Recommendation Dataset,2200,8,0.15,Soil classification & clustering
+Total Big Data Analyzed,3246188,57,1149.95,Integrated platform master

@@ -1,0 +1,7 @@
+model,metric,value,validation
+Random Forest Classifier,Accuracy,0.9931818181818182,Stratified 80/20 Test Holdout
+Random Forest Classifier,Weighted F1 Score,0.9931775541531639,Stratified 80/20 Test Holdout
+Random Forest Classifier,Weighted Precision,0.9935064935064934,Stratified 80/20 Test Holdout
+Random Forest Classifier,Weighted Recall,0.9931818181818182,Stratified 80/20 Test Holdout
+K-Means Clustering,WCSS Inertia,6856.211728440807,"k=5, 7D Standardized Vectors"
+Yield Regressor,MAE,7.234620765006615,80/20 Holdout

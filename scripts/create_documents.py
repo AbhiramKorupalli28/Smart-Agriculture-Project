@@ -58,7 +58,9 @@ for cell in ws2[1]:
     cell.fill = PatternFill('solid', fgColor='2F7D32')
 for c in 'ABCD':
     ws2.column_dimensions[c].width = {'A': 20, 'B': 26, 'C': 24, 'D': 30}[c]
-wb.save(ROOT / 'Dataset_Inventory.xlsx')
+reports_dir = ROOT / 'reports'
+reports_dir.mkdir(parents=True, exist_ok=True)
+wb.save(reports_dir / 'Dataset_Inventory.xlsx')
 
 # 2. Academic Case Study Report
 D = Document()

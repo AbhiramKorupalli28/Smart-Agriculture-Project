@@ -1,176 +1,168 @@
-# 🌱 Smart Agriculture Big Data Analytics Platform
+# Smart Agriculture Big Data Analytics Using Hadoop and Apache Spark
 
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![Apache Spark](https://img.shields.io/badge/Apache%20Spark-3.5-E25A1C?style=for-the-badge&logo=apachespark&logoColor=white)](https://spark.apache.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.40+-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)](https://streamlit.io/)
-[![Kaggle Dataset](https://img.shields.io/badge/Kaggle%20Dataset-1.20%20GB-20BEFF?style=for-the-badge&logo=kaggle&logoColor=white)](https://www.kaggle.com/datasets/noeyislearning/agricultural-production)
-[![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
+This project uses large-scale agricultural data to study crop yields, precision recommendations, and soil environmental factors across regions. We used Apache Hadoop and Apache Spark (PySpark, Spark SQL) to clean, aggregate, and analyze multi-gigabyte agricultural records, and trained Random Forest and K-Means models alongside an interactive Streamlit web dashboard.
 
-An enterprise-grade, distributed **Big Data Analytics & Precision Agritech Platform** designed to process multi-gigabyte agricultural datasets, train explainable machine learning models, simulate IoT sensor irrigation telemetry, and deliver real-time visual insights through an interactive 10-module dashboard.
+## Dataset
+We used the **USDA Agricultural Production Census** from Kaggle, alongside the **Indian Crop Production and Precision Soil Recommendation datasets**.
+- **Kaggle Big Data source:** [https://www.kaggle.com/datasets/noeyislearning/agricultural-production](https://www.kaggle.com/datasets/noeyislearning/agricultural-production)
+- **Secondary agriculture source:** [https://github.com/AbhishekKandoi/Crop-Yield-Prediction-based-on-Indian-Agriculture](https://github.com/AbhishekKandoi/Crop-Yield-Prediction-based-on-Indian-Agriculture)
+- **Extracted master census dataset:** `data/raw/agricultural_production_census_2002.csv` (3,193,989 rows, 39 columns, 1.20 GB CSV, >2.5 GB in-memory Spark partitions)
+- **Integrated agricultural tables:**
+  - `Census Commodity & Practice Records` (3,193,989 rows: Commodity, Sector, Practices, Farm Area, Harvest Volumes)
+  - `Indian Crop Production Time-Series` (49,999 records: State, District, Year, Season, Area, Production)
+  - `Agronomic Soil & Environmental Profiles` (2,200 records: N, P, K, pH, Temperature, Humidity, Rainfall, Crop Label)
+- **Preserved continuous environmental & soil metrics:** Nitrogen (N), Phosphorus (P), Potassium (K), Soil pH, Ambient Temperature, Relative Humidity, Rainfall, Solar Radiation, and Soil Moisture.
 
----
+## Technologies Used
+- Python 3.13
+- OpenJDK 21 (Temurin / Oracle)
+- Apache Hadoop 3.3.0 (HDFS distributed storage & native winutils integration)
+- Apache Spark 3.5.3 (PySpark local cluster mode, 12 CPU cores)
+- Spark SQL (in-memory temporary views & distributed aggregations)
+- scikit-learn 1.5+ (RandomForestClassifier, KMeans, Regressors)
+- Streamlit 1.40+ & Plotly (Interactive multi-module web dashboard with 4 themes)
 
-## 📌 Executive Architecture & Highlights
-
-- **1.20 GB Kaggle Big Data Pipeline**: Direct distributed ingestion of the official USDA Agricultural Production Census dataset (**3,193,989 records**, 39 columns) using **Apache Spark (PySpark 3.5)** across 12 executor partitions.
-- **High-Throughput Distributed Processing**: Achieved a processing speed of **86,354 records/second**, ingesting 1.20 GB in **2.59 seconds** and delivering a **4.55x speedup** over single-threaded Pandas.
-- **Precision Agritech Machine Learning**:
-  - **Random Forest Classifier**: **99.32% Accuracy** for multi-factor crop recommendation with full XAI (Explainable AI) feature importance ranking.
-  - **Unsupervised K-Means Clustering**: Segmenting 5 agro-ecological soil/climate clusters with PySpark `VectorAssembler` and `StandardScaler`.
-  - **Yield Regressor**: Evaluating regional yield per hectare across Indian agricultural states.
-- **IoT Smart Farm & Irrigation Radar**: Real-time simulation of soil moisture, ambient temperature, humidity, and solar radiation to trigger automated pulse drip irrigation and calculate dynamic water conservation (1.23M+ Liters conserved).
-- **Interactive 10-Module Dashboard**: Built with Streamlit, Plotly, and Folium featuring glassmorphism cards, interactive Indian geospatial explorer, 7D polar spider charts, and 4 dynamic high-contrast UI themes.
-
----
-
-## 📊 Big Data Processing & Spark Benchmarks
-
-The core data engineering pipeline (`src/spark_job.py`) runs in a distributed mode (`local[*]`) utilizing native multi-core execution and Hadoop winutils integration on Windows.
-
-| Metric / Stage | Apache Spark (Distributed) | Single-Node Pandas | Benchmark / Speedup |
-| :--- | :---: | :---: | :---: |
-| **Ingested File Size** | **1.20 GB** (`1,202,410,555 bytes`) | 1.20 GB | Kaggle USDA Census CSV |
-| **Record Count** | **3,193,989 rows** | 3,193,989 rows | 39 Schema Attributes |
-| **Ingestion Time** | **2.59 seconds** | 18.42 seconds | **7.11x Faster Ingestion** |
-| **Aggregation & Transformations** | **36.99 seconds** | 168.40 seconds | **4.55x End-to-End Speedup** |
-| **Distributed Throughput** | **86,354 records/sec** | ~18,900 records/sec | 12 Parallel Worker Partitions |
-| **Storage Optimization** | **Snappy Columnar Parquet** | Uncompressed CSV | **65% Disk Footprint Reduction** |
-
-The aggregated outputs are partitioned and written directly to `data/processed/spark/` (`census_state_summary`, `census_commodity_summary`, `season_summary`, `recommendation_clusters`).
-
----
-
-## 🤖 Machine Learning Model Benchmarks
-
-| Model | Target Task | Metric | Executed Value | Validation Method |
-| :--- | :--- | :--- | :---: | :--- |
-| **Random Forest** | 22-Class Crop Recommendation | **Accuracy** | **99.32%** | Stratified 80/20 Holdout |
-| **Random Forest** | 22-Class Crop Recommendation | **Weighted F1** | **0.9932** | Stratified 80/20 Holdout |
-| **Random Forest** | 22-Class Crop Recommendation | **Precision** | **0.9935** | Stratified 80/20 Holdout |
-| **Random Forest** | 22-Class Crop Recommendation | **Recall** | **0.9932** | Stratified 80/20 Holdout |
-| **K-Means (k=5)** | Agro-Climatic Soil Segmentation | **Inertia (WCSS)**| **4,204.62** | Scaled 7D Vector Embeddings |
-| **Yield Regressor**| Yield per Area Estimation | **MAE** | **0.8412** | 80/20 Holdout Evaluation |
-
-### Explainable AI (XAI) Feature Importance:
-1. **Rainfall**: `23.03%`
-2. **Humidity**: `21.87%`
-3. **Potassium (K)**: `17.60%`
-4. **Phosphorus (P)**: `14.56%`
-5. **Nitrogen (N)**: `10.53%`
-6. **Temperature**: `7.04%`
-7. **Soil pH**: `5.35%`
-
----
-
-## 🖥️ Interactive Web Dashboard (10 Modules)
-
-The platform provides an interactive analytical web interface (`dashboard/app.py`):
-
-1. **📊 Executive Command Center**: High-level platform KPIs (3.24M records, 86k throughput, 99.32% accuracy), seasonal distribution scatter plots, and top cultivar bar charts.
-2. **⚡ Big Data & Spark Engine**: In-depth telemetry on the 1.20 GB Kaggle dataset, Spark vs Pandas runtime performance comparisons, and interactive Parquet querying.
-3. **🗺️ Geospatial Farm Explorer**: Interactive Asia/India map detailing major agricultural belts (Punjab, Maharashtra, Andhra Pradesh, West Bengal), production volume, and soil health indices.
-4. **💧 Smart IoT Irrigation Radar**: Interactive sensor sliders (Soil Moisture, Temp, Humidity, Solar Radiation), automated irrigation triggers, pest risk index, and water conservation calculators.
-5. **🎯 Precision Crop Recommender**: Probabilistic top-3 crop recommendations with confidence bars and a **7-dimensional polar Radar (Spider) chart** comparing soil parameters to optimal crop centroids.
-6. **🤖 ML Model Arena**: Detailed classification metrics, feature importance charts, and held-out confusion matrix visualizations.
-7. **🧪 Soil & Nutrient Analytics**: Interactive NPK, pH, and climate variable histograms across crop cultivars.
-8. **📈 Crop Yield & Seasonal Trends**: Regional yield per hectare distributions and seasonal box plots.
-9. **🧬 K-Means Pattern Clusters**: 5-cluster climate-soil scatter plot and mean centroid tables.
-10. **🏛️ Distributed Architecture & HDFS**: Distributed system topology, multi-node configuration specs, and cluster deployment documentation.
-
-### 🎨 Available Themes:
-- `🌿 Emerald AgriTech (Vibrant Dark)` *(Default)*: Deep twilight obsidian, electric emerald green, amber highlights, glowing title gradients.
-- `🌾 Golden Harvest (Amber & Slate)`: Warm golden wheat, rich amber, and fertile bronze earth tones.
-- `🌌 Cyber Midnight (Neon & Blue)`: Cosmic navy blue, electric neon mint, and vibrant cyan.
-- `☀️ Clean Modern Porcelain (Light)`: High-contrast porcelain, crisp slate, and forest green accents.
-
----
-
-## 📂 Project Repository Structure
+## Project Structure
 
 ```
 Smart-Agriculture-Project/
-├── dashboard/
-│   └── app.py                     # 10-Module Streamlit interactive analytics platform
-├── data/
-│   ├── raw/
-│   │   ├── agricultural_production_census_2002.csv  # 1.20 GB Kaggle Big Data (Git-ignored)
-│   │   ├── crop_prediction_india.csv               # Indian crop production dataset
-│   │   └── crop_recommendation.csv                 # Soil & environmental recommendation data
-│   └── processed/
-│       └── spark/                 # Partitioned Snappy Parquet outputs from PySpark
-├── outputs/
-│   ├── figures/                   # Confusion matrix, cluster plots, feature importances
-│   ├── models/                    # Trained Random Forest & K-Means pipelines (.joblib)
-│   ├── tables/                    # Curated prediction tables and cluster summaries
-│   ├── metrics.json               # Model validation and evaluation metrics
-│   └── spark_benchmark.json       # 1.20 GB Spark execution benchmark telemetry
-├── scripts/
-│   ├── create_documents.py        # Generates Word (.docx), PDF (.pdf), & Excel inventory
-│   └── hdfs_setup.sh              # HDFS cluster directory initialization script
-├── src/
-│   ├── pipeline.py                # Scikit-learn data processing and model training
-│   └── spark_job.py               # Apache PySpark 1.20 GB distributed ETL & ML pipeline
-├── Dataset_Inventory.xlsx         # Multi-tab dataset inventory & executed metrics
-├── requirements.txt               # Python package dependencies
-├── .gitignore                     # Excludes >100MB datasets & college reports
-└── README.md                      # Complete project documentation
+├── dashboard/      # Interactive web application
+│   └── app.py
+├── data/           # Dataset information and raw/processed records
+│   ├── processed/
+│   │   └── spark/
+│   └── raw/
+│       ├── crop_prediction_india.csv
+│       └── crop_recommendation.csv
+├── docs/           # Project methodology, sources, and screenshot assets
+│   ├── methodology.md
+│   ├── research_sources.md
+│   ├── validation_log.md
+│   └── screenshots/
+│       ├── dashboard_overview.png
+│       ├── spark_processing.png
+│       ├── geospatial_explorer.png
+│       ├── iot_irrigation_radar.png
+│       ├── crop_recommender.png
+│       └── evaluation_results.png
+├── outputs/        # Machine learning models, benchmarks, and figures
+│   ├── figures/
+│   ├── models/
+│   ├── metrics.json
+│   └── spark_benchmark.json
+├── reports/        # Final project report and documentation
+│   ├── final_report.md
+│   └── Dataset_Inventory.xlsx
+├── results/        # Spark analytical outputs and query results
+│   ├── 1_total_records.csv
+│   ├── 2_top_cultivated_crops.csv
+│   ├── 3_state_production_summary.csv
+│   ├── 4_seasonal_yield_distribution.csv
+│   ├── 5_commodity_census_aggregates.csv
+│   ├── 6_soil_cluster_centroids.csv
+│   ├── 7_model_evaluation_metrics.csv
+│   ├── 8_spark_benchmark_comparison.csv
+│   └── 9_iot_irrigation_thresholds.csv
+├── src/            # Python data processing scripts and PySpark engines
+│   ├── __init__.py
+│   ├── pipeline.py
+│   └── spark_job.py
+├── requirements.txt
+├── .gitignore
+└── README.md       # Project overview, results, and instructions
 ```
 
----
+## Main Steps Followed
+1. Inspected multi-gigabyte agricultural census records from Kaggle, detecting schema columns, commodity types, and farm practices automatically.
+2. Downloaded the official 1.20 GB USDA Agricultural Production Census dataset using the Kaggle API.
+3. Executed distributed PySpark ETL across 12 partitions with automatic type casting and schema normalization.
+4. Cleaned and profiled data using PySpark, computing state and commodity aggregates and saving partitioned Parquet outputs.
+5. Ran Spark SQL queries to benchmark distributed multi-threaded execution vs single-threaded Pandas (86,354 rec/sec; 4.55x speedup).
+6. Trained Random Forest (99.32% accuracy) with Explainable AI (XAI) feature importances and K-Means ($k=5$) soil-climate segmentation.
+7. Developed a real-time IoT smart irrigation radar and interactive 10-module Streamlit dashboard with 4 vibrant theme modes.
 
-## ⚡ Quick Start: Running in VS Code
+## Algorithms Used
+- **Random Forest Classifier:** Ensemble classification of 100 decision trees achieving **99.32% accuracy** for 22-class crop recommendation.
+- **K-Means Clustering:** Unsupervised agro-climatic clustering ($k=5$) over standardized 7-dimensional continuous soil vectors ($N, P, K, pH, \text{temp}, \text{humidity}, \text{rainfall}$).
+- **Explainable AI (XAI):** Permutation feature importance evaluation ranking Rainfall (23.0%), Humidity (21.9%), and Potassium (17.6%) as primary predictive factors.
 
-### Prerequisites
-- Python 3.10 – 3.13
-- Java 8/11/17 (for Apache Spark execution)
-- Git
+## Results Summary
 
-### 1. Clone & Set Up Environment
-```powershell
-# Clone the repository
-git clone https://github.com/AbhiramKorupalli28/Smart-Agriculture-Project.git
-cd Smart-Agriculture-Project
+| Target Task | Model | Accuracy | Weighted F1 | Precision | Recall | Key Validation Metric |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **Crop Recommendation** | **Random Forest** | **99.32%** | **0.9932** | **0.9935** | **0.9932** | Stratified 80/20 Test Holdout |
+| **Soil Segmentation** | **K-Means ($k=5$)** | N/A | N/A | N/A | N/A | **WCSS Inertia: 4,204.62** |
+| **Yield Estimation** | **Yield Regressor** | N/A | N/A | N/A | N/A | **MAE: 0.8412** |
 
-# Create and activate a virtual environment
-python -m venv .venv
-.venv\Scripts\activate   # On Linux/macOS: source .venv/bin/activate
+### Distributed Spark Benchmarks:
 
-# Install dependencies
-pip install -r requirements.txt
-```
+| Metric / Stage | Apache Spark (12 Cores) | Single-Node Pandas | Benchmark / Speedup |
+| :--- | :---: | :---: | :---: |
+| **Ingested File Size** | **1.20 GB** (`1,202,410,555 bytes`) | 1.20 GB | Kaggle USDA Census CSV |
+| **Total Processed Records** | **3,193,989 rows** | 3,193,989 rows | 39 Schema Attributes |
+| **Ingestion Time** | **2.59 seconds** | 18.42 seconds | **7.11x Faster Read** |
+| **Aggregations & Write** | **36.99 seconds** | 168.40 seconds | **4.55x End-to-End Speedup** |
+| **Processing Throughput** | **86,354 records/sec** | ~18,900 records/sec | 12 Parallel Partitions |
+| **Storage Optimization** | **Snappy Columnar Parquet** | Raw CSV | **65% Disk Footprint Reduction** |
 
-### 2. Run the Apache Spark Big Data Pipeline
-```powershell
-# Executes distributed ingestion and Parquet generation across 12 partitions
-python src/spark_job.py
-```
+**Evaluation Highlights:**
+- **Random Forest** achieved **99.32% accuracy** across 22 crop classes, successfully distinguishing close agronomic profiles (e.g. Rice vs. Jute, Maize vs. Cotton).
+- In **Explainable AI (XAI)**, Rainfall (23.03%) and Humidity (21.87%) emerged as the top environmental drivers, while Potassium (17.60%) was the most critical biochemical nutrient.
+- In **K-Means clustering** ($k=5$), distinct soil-climate clusters separated high-rainfall tropical crops from arid, low-moisture pulse and millet zones.
 
-### 3. Launch the Interactive Web Dashboard
-```powershell
-# Starts the Streamlit dashboard on http://localhost:8501
-streamlit run dashboard/app.py
-```
-Open **[http://localhost:8501](http://localhost:8501)** in your web browser.
+## Project Documentation
+- [Final Project Report](reports/final_report.md) — Comprehensive final report covering data preprocessing, PySpark ETL, Spark benchmarks, and machine learning evaluations.
+- [Methodology](docs/methodology.md) — Detailed distributed pipeline methodology and architecture specifications.
 
-### 4. Regenerate Project Documents (Word, PDF, Excel)
-```powershell
-python scripts/create_documents.py
-```
+## Screenshots
 
----
+### Interactive Dashboard Overview
+![Dashboard Overview](docs/screenshots/dashboard_overview.png)  
+*Overview page displaying 3.24M+ records, 86k/s Spark throughput, and platform KPIs.*
 
-## 📜 Citations & References
+### Big Data & Spark Processing
+![Spark Processing](docs/screenshots/spark_processing.png)  
+*1.20 GB Kaggle dataset telemetry, execution timings, and 4.55x Spark vs Pandas benchmark.*
 
-1. **Abhishek Kandoi**, *Crop Yield Prediction based on Indian Agriculture Dataset*, GitHub.
-2. **USDA / Kaggle**, *Agricultural Production Census Dataset (1.20 GB, 3.19M Records)*, Kaggle Datasets.
-3. **IRTA Remote Sensing**, *CATCrops: Sentinel-2 Multi-spectral Time Series Dataset*, Kaggle.
-4. **Tata-Cornell Institute (TCI) & ICRISAT**, *District-Level Database for Indian Agriculture and Allied Sectors (1966–2020)*.
-5. **Directorate of Economics and Statistics (DES)**, *Area, Production and Yield (APY) Reports*, Ministry of Agriculture & Farmers Welfare, Govt. of India.
-6. **Apache Spark Documentation**, *PySpark and MLlib Distributed Processing Guide*, Apache Software Foundation.
-7. **Scikit-Learn Documentation**, *Random Forest Classifier & Regressor User Guide*.
-8. **Streamlit Documentation**, *Interactive Data Applications and Dashboard Framework*.
+### Geospatial Farm Explorer
+![Geospatial Explorer](docs/screenshots/geospatial_explorer.png)  
+*Interactive India agro-climatic map with production volume and soil health indices.*
 
----
+### Smart IoT Irrigation Radar
+![IoT Irrigation Radar](docs/screenshots/iot_irrigation_radar.png)  
+*Simulated field sensor telemetry, automated drip triggers, and water conservation metrics.*
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+### Precision Crop Recommender
+![Crop Recommender](docs/screenshots/crop_recommender.png)  
+*Top-3 probabilistic recommendations with 7-dimensional polar spider radar comparison.*
+
+### Model Evaluation Results
+![Evaluation Results](docs/screenshots/evaluation_results.png)  
+*Held-out confusion matrix and classification performance across 22 crop classes.*
+
+## How to Run the Project
+
+> **Notes:**
+> - Python 3.10–3.13 and Java 8/11/17 must be installed.
+> - The application automatically uses multi-threaded local cluster mode (`local[*]`) with native Hadoop winutils integration on Windows.
+
+1. Set up the virtual environment:
+   ```bash
+   python -m venv .venv
+   # Windows:
+   .venv\Scripts\activate
+   # Linux / macOS:
+   source .venv/bin/activate
+   pip install -r requirements.txt
+   ```
+
+2. Run the Apache Spark Big Data pipeline:
+   ```bash
+   python src/spark_job.py
+   ```
+
+3. Launch the interactive Streamlit web dashboard:
+   ```bash
+   streamlit run dashboard/app.py
+   ```
+   Open **http://localhost:8501** in your browser.

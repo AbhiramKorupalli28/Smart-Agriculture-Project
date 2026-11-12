@@ -1,0 +1,4 @@
+moisture_range_pct,status,action,water_conserved_liters_per_10ha
+0% - 28%,CRITICAL DEFICIT,Automated Pulse Drip Active,"1,230,000 L"
+28% - 55%,OPTIMAL MOISTURE,Pumps Idle (Energy Saving),Full Conservation
+55% - 100%,SATURATED / AERATION RISK,Drainage Advisory Active,Zero Additional Input
