@@ -44,3 +44,13 @@ Thumbs.db
 *.docx
 *.pdf
 Mini_Case_Study_Report.*
+
+# Large Big Data Files (>100MB)
+data/raw/agricultural_production*
+data/raw/iot_telemetry*
+data/raw/bigdata*
+data/processed/bigdata*
+*.parquet.crc
+.*.crc
+
+
