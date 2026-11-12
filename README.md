@@ -133,6 +133,10 @@ Smart-Agriculture-Project/
 ![Crop Recommender](docs/screenshots/crop_recommender.png)  
 *Top-3 probabilistic recommendations with 7-dimensional polar spider radar comparison.*
 
+### Machine Learning Model Arena & Explainable AI
+![ML Model Arena](docs/screenshots/ml_model_arena.png)  
+*Machine Learning Model Arena showcasing 99.32% Random Forest classification, Explainable AI (XAI) feature importances, and held-out evaluation matrix.*
+
 ### Model Evaluation Results
 ![Evaluation Results](docs/screenshots/evaluation_results.png)  
 *Held-out confusion matrix and classification performance across 22 crop classes.*

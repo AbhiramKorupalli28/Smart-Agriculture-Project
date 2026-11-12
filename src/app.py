@@ -353,22 +353,32 @@ benchmarks = json.loads(bench_file.read_text()) if bench_file.exists() else {}
 # -------------------------------------------------------------
 # NAVIGATION
 # -------------------------------------------------------------
+PAGE_EXEC = '📊 Executive Command Center'
+PAGE_SPARK = '⚡ Big Data & Spark Engine'
+PAGE_GEO = '🗺️ Geospatial Farm Explorer'
+PAGE_SOIL = '🧪 Soil & Nutrient Analytics'
+PAGE_YIELD = '📈 Crop Yield & Seasonal Trends'
+PAGE_ML = '🤖\u00A0\u00A0ML Model Arena'
+PAGE_CLUSTERS = '🧬 K-Means Pattern Clusters'
+PAGE_RECOMMEND = '🎯 Precision Crop Recommender'
+PAGE_IOT = '💧 Smart IoT Irrigation Radar'
+PAGE_HDFS = '🏛️ Distributed Architecture & HDFS'
+
+NAV_PAGES = [
+    PAGE_EXEC,
+    PAGE_SPARK,
+    PAGE_GEO,
+    PAGE_SOIL,
+    PAGE_YIELD,
+    PAGE_ML,
+    PAGE_CLUSTERS,
+    PAGE_RECOMMEND,
+    PAGE_IOT,
+    PAGE_HDFS
+]
+
 st.sidebar.markdown('### 🧭 Navigation')
-page = st.sidebar.radio(
-    'Go to',
-    [
-        '📊 Executive Command Center',
-        '⚡ Big Data & Spark Engine',
-        '🗺️ Geospatial Farm Explorer',
-        '💧 Smart IoT Irrigation Radar',
-        '🎯 Precision Crop Recommender',
-        '🤖 ML Model Arena',
-        '🧪 Soil & Nutrient Analytics',
-        '📈 Crop Yield & Seasonal Trends',
-        '🧬 K-Means Pattern Clusters',
-        '🏛️ Distributed Architecture & HDFS'
-    ]
-)
+page = st.sidebar.radio('Go to', NAV_PAGES)
 
 # Header Title with Live Status Badges
 st.markdown('<h1 class="main-title">🌱 Smart Agriculture Big Data Analytics Platform</h1>', unsafe_allow_html=True)
@@ -385,7 +395,7 @@ st.markdown(f'''
 # -------------------------------------------------------------
 # 1. EXECUTIVE COMMAND CENTER
 # -------------------------------------------------------------
-if page == '📊 Executive Command Center':
+if page == PAGE_EXEC:
     st.subheader('📊 Global Telemetry & Platform Overview')
     c1, c2, c3, c4 = st.columns(4)
     total_recs = 3246188
@@ -430,7 +440,7 @@ if page == '📊 Executive Command Center':
 # -------------------------------------------------------------
 # 2. BIG DATA ENGINE & SPARK BENCHMARKS (1.2 GB KAGGLE CENSUS)
 # -------------------------------------------------------------
-elif page == '⚡ Big Data & Spark Engine':
+elif page == PAGE_SPARK:
     st.subheader('⚡ Multi-Gigabyte Apache Spark Distributed Benchmark')
     st.markdown('''
     This module validates distributed Big Data execution on the **1.20 GB official USDA Agricultural Production Census dataset** 
@@ -520,7 +530,7 @@ elif page == '⚡ Big Data & Spark Engine':
 # -------------------------------------------------------------
 # 3. GEOSPATIAL FARM EXPLORER (INDIA MAP)
 # -------------------------------------------------------------
-elif page == '🗺️ Geospatial Farm Explorer':
+elif page == PAGE_GEO:
     st.subheader('🗺️ Geospatial Agricultural Intelligence: Major Indian Hubs')
     st.markdown('Interactive regional mapping showing production density, primary crop clusters, and climate telemetry across Indian states.')
 
@@ -561,9 +571,162 @@ elif page == '🗺️ Geospatial Farm Explorer':
     st.dataframe(geo_data[['State', 'Primary Crop', 'Production (Million Tons)', 'Average Soil Moisture (%)', 'Soil Health Index (1-100)']], use_container_width=True)
 
 # -------------------------------------------------------------
-# 4. SMART IOT IRRIGATION & WEATHER RADAR
+# 4. SOIL & NUTRIENT ANALYTICS
 # -------------------------------------------------------------
-elif page == '💧 Smart IoT Irrigation Radar':
+elif page == PAGE_SOIL:
+    st.subheader('🧪 Soil Nutrient & Biochemical Distribution')
+    sel_feat = st.selectbox('Select Soil Variable', ['N', 'P', 'K', 'ph', 'rainfall', 'humidity', 'temperature'])
+    fig = px.histogram(
+        rec,
+        x=sel_feat,
+        color='label',
+        nbins=35,
+        title=f'{sel_feat} Distribution across Agricultural Crop Types',
+        color_discrete_sequence=px.colors.qualitative.Pastel
+    )
+    render_chart(fig, height=480)
+
+# -------------------------------------------------------------
+# 5. CROP YIELD & SEASONAL TRENDS
+# -------------------------------------------------------------
+elif page == PAGE_YIELD:
+    st.subheader('📈 Regional Crop Yield per Hectare & Seasonal Variations')
+    filtered = prod.dropna(subset=['Yield per Area']).query('`Yield per Area` < `Yield per Area`.quantile(0.98)')
+    fig = px.box(
+        filtered,
+        x='Season',
+        y='Yield per Area',
+        color='Season',
+        title='Seasonal Yield Variations (Metric Tons / Hectare)',
+        color_discrete_sequence=['#10b981', '#06b6d4', '#f59e0b', '#ec4899', '#8b5cf6']
+    )
+    render_chart(fig, height=480)
+
+# -------------------------------------------------------------
+# 6. ML MODEL EVALUATION ARENA
+# -------------------------------------------------------------
+elif page == PAGE_ML:
+    st.subheader('🤖 Machine Learning Model Benchmarking & Explainable AI')
+    st.markdown('Inspect model evaluation metrics across Random Forest, K-Means Clustering, and Feature Importances.')
+
+    m_rf = metrics.get('random_forest', {})
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric('Classification Accuracy', f"{m_rf.get('accuracy', 0.993):.4f}", delta='Held-out Test')
+    c2.metric('Weighted F1 Score', f"{m_rf.get('f1_weighted', 0.993):.4f}")
+    c3.metric('Weighted Precision', f"{m_rf.get('precision_weighted', 0.993):.4f}")
+    c4.metric('Weighted Recall', f"{m_rf.get('recall_weighted', 0.993):.4f}")
+
+    col_l, col_r = st.columns([1, 1])
+    with col_l:
+        st.markdown('##### 🔍 Random Forest Feature Importance (Explainable AI)')
+        model_path = OUT / 'models/random_forest.joblib'
+        if model_path.exists():
+            pkg = joblib.load(model_path)
+            imp_df = pd.DataFrame({
+                'Feature': ['Rainfall', 'Humidity', 'Potassium (K)', 'Phosphorus (P)', 'Nitrogen (N)', 'Temperature', 'Soil pH'],
+                'Importance Score (%)': [23.03, 21.87, 17.60, 14.56, 10.53, 7.04, 5.35]
+            }).sort_values('Importance Score (%)', ascending=True)
+
+            fig_imp = px.bar(
+                imp_df,
+                x='Importance Score (%)',
+                y='Feature',
+                orientation='h',
+                color='Importance Score (%)',
+                color_continuous_scale='Greens'
+            )
+            render_chart(fig_imp, height=420)
+
+    with col_r:
+        st.markdown('##### 🎯 Held-out Confusion Matrix')
+        img = OUT / 'figures/confusion_matrix.png'
+        if img.exists():
+            st.image(str(img), use_container_width=True)
+
+# -------------------------------------------------------------
+# 7. K-MEANS PATTERN CLUSTERS
+# -------------------------------------------------------------
+elif page == PAGE_CLUSTERS:
+    st.subheader('🧬 Unsupervised K-Means Soil & Environmental Clusters')
+    f_clust = OUT / 'tables/recommendation_clusters.parquet'
+    df_c = pd.read_parquet(f_clust) if f_clust.exists() else rec
+    fig = px.scatter(
+        df_c,
+        x='rainfall',
+        y='temperature',
+        color='cluster',
+        size='humidity',
+        hover_data=['label'],
+        title='5 Distinct Agricultural Soil-Climate Clusters',
+        color_continuous_scale='Turbo'
+    )
+    render_chart(fig, height=480)
+    cols = [c for c in ['n', 'p', 'k', 'N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'] if c in df_c.columns]
+    st.dataframe(df_c.groupby('cluster')[cols].mean().round(2), use_container_width=True)
+
+# -------------------------------------------------------------
+# 8. PRECISION CROP RECOMMENDER (AI AGRONOMY LAB)
+# -------------------------------------------------------------
+elif page == PAGE_RECOMMEND:
+    st.subheader('🎯 AI Precision Crop Recommender with Multi-Class Probabilities')
+    st.markdown('Enter soil nutrient parameters and climate factors to receive Top-3 probabilistic recommendations and an agronomic radar comparison.')
+
+    f_display = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
+    
+    col1, col2 = st.columns(2)
+    with col1:
+        n_in = st.number_input('Nitrogen (N) [mg/kg]', 0.0, 300.0, 65.0)
+        p_in = st.number_input('Phosphorus (P) [mg/kg]', 0.0, 200.0, 48.0)
+        k_in = st.number_input('Potassium (K) [mg/kg]', 0.0, 300.0, 52.0)
+        ph_in = st.number_input('Soil pH (0-14)', 3.0, 10.0, 6.7)
+    with col2:
+        temp_in = st.number_input('Ambient Temperature (°C)', 5.0, 50.0, 26.5)
+        hum_in = st.number_input('Relative Humidity (%)', 10.0, 100.0, 78.0)
+        rain_in = st.number_input('Annual Rainfall (mm)', 10.0, 350.0, 145.0)
+
+    vals = [n_in, p_in, k_in, temp_in, hum_in, ph_in, rain_in]
+
+    if st.button('🌱 Analyze Soil & Predict Crop'):
+        model_path = OUT / 'models/random_forest.joblib'
+        if model_path.exists():
+            model_pkg = joblib.load(model_path)
+            clf = model_pkg['model']
+            feats = model_pkg.get('features', [x.lower() for x in f_display])
+            in_df = pd.DataFrame([vals], columns=feats)
+            
+            # Probabilities for Top 3
+            probs = clf.predict_proba(in_df)[0]
+            top3_idx = np.argsort(probs)[::-1][:3]
+            top3_crops = clf.classes_[top3_idx]
+            top3_probs = probs[top3_idx]
+
+            st.success(f"### 🏆 Top Recommended Crop: **{top3_crops[0].upper()}** ({top3_probs[0]*100:.1f}% Confidence)")
+
+            c_p1, c_p2, c_p3 = st.columns(3)
+            for col, crop_name, p_val in zip([c_p1, c_p2, c_p3], top3_crops, top3_probs):
+                col.metric(crop_name.capitalize(), f"{p_val*100:.1f}% Match")
+                col.progress(float(p_val))
+
+            # Radar Chart Comparison against Ideal Crop Centroid
+            ideal = rec[rec['label'] == top3_crops[0]][['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']].mean()
+
+            # Normalized 0-100 scale for radar comparison
+            cat = ['Nitrogen', 'Phosphorus', 'Potassium', 'Temperature', 'Humidity', 'pH x 10', 'Rainfall / 2']
+            user_norm = [n_in, p_in, k_in, temp_in * 2.5, hum_in, ph_in * 10, rain_in / 2]
+            ideal_norm = [ideal['N'], ideal['P'], ideal['K'], ideal['temperature'] * 2.5, ideal['humidity'], ideal['ph'] * 10, ideal['rainfall'] / 2]
+
+            fig_radar = go.Figure()
+            fig_radar.add_trace(go.Scatterpolar(r=user_norm, theta=cat, fill='toself', name='Current Soil Parameters', line_color='#06b6d4'))
+            fig_radar.add_trace(go.Scatterpolar(r=ideal_norm, theta=cat, fill='toself', name=f'Ideal {top3_crops[0].capitalize()} Profile', line_color='#10b981'))
+            fig_radar.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 200])), title=f"Soil Nutrient & Environmental Compatibility Envelope ({top3_crops[0].capitalize()})")
+            render_chart(fig_radar, height=450)
+        else:
+            st.error("Model file not found. Run python -m src.pipeline first.")
+
+# -------------------------------------------------------------
+# 9. SMART IOT IRRIGATION & WEATHER RADAR
+# -------------------------------------------------------------
+elif page == PAGE_IOT:
     st.subheader('💧 Precision IoT Farm Telemetry & Automated Irrigation AI')
     st.markdown('Simulate real-time smart farm IoT telemetry nodes to trigger AI irrigation decisions and calculate dynamic water conservation.')
 
@@ -626,159 +789,6 @@ elif page == '💧 Smart IoT Irrigation Radar':
             }
         ))
         render_chart(fig_gauge, height=320)
-
-# -------------------------------------------------------------
-# 5. PRECISION CROP RECOMMENDER (AI AGRONOMY LAB)
-# -------------------------------------------------------------
-elif page == '🎯 Precision Crop Recommender':
-    st.subheader('🎯 AI Precision Crop Recommender with Multi-Class Probabilities')
-    st.markdown('Enter soil nutrient parameters and climate factors to receive Top-3 probabilistic recommendations and an agronomic radar comparison.')
-
-    f_display = ['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']
-    
-    col1, col2 = st.columns(2)
-    with col1:
-        n_in = st.number_input('Nitrogen (N) [mg/kg]', 0.0, 300.0, 65.0)
-        p_in = st.number_input('Phosphorus (P) [mg/kg]', 0.0, 200.0, 48.0)
-        k_in = st.number_input('Potassium (K) [mg/kg]', 0.0, 300.0, 52.0)
-        ph_in = st.number_input('Soil pH (0-14)', 3.0, 10.0, 6.7)
-    with col2:
-        temp_in = st.number_input('Ambient Temperature (°C)', 5.0, 50.0, 26.5)
-        hum_in = st.number_input('Relative Humidity (%)', 10.0, 100.0, 78.0)
-        rain_in = st.number_input('Annual Rainfall (mm)', 10.0, 350.0, 145.0)
-
-    vals = [n_in, p_in, k_in, temp_in, hum_in, ph_in, rain_in]
-
-    if st.button('🌱 Analyze Soil & Predict Crop'):
-        model_path = OUT / 'models/random_forest.joblib'
-        if model_path.exists():
-            model_pkg = joblib.load(model_path)
-            clf = model_pkg['model']
-            feats = model_pkg.get('features', [x.lower() for x in f_display])
-            in_df = pd.DataFrame([vals], columns=feats)
-            
-            # Probabilities for Top 3
-            probs = clf.predict_proba(in_df)[0]
-            top3_idx = np.argsort(probs)[::-1][:3]
-            top3_crops = clf.classes_[top3_idx]
-            top3_probs = probs[top3_idx]
-
-            st.success(f"### 🏆 Top Recommended Crop: **{top3_crops[0].upper()}** ({top3_probs[0]*100:.1f}% Confidence)")
-
-            c_p1, c_p2, c_p3 = st.columns(3)
-            for col, crop_name, p_val in zip([c_p1, c_p2, c_p3], top3_crops, top3_probs):
-                col.metric(crop_name.capitalize(), f"{p_val*100:.1f}% Match")
-                col.progress(float(p_val))
-
-            # Radar Chart Comparison against Ideal Crop Centroid
-            ideal = rec[rec['label'] == top3_crops[0]][['N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall']].mean()
-
-            # Normalized 0-100 scale for radar comparison
-            cat = ['Nitrogen', 'Phosphorus', 'Potassium', 'Temperature', 'Humidity', 'pH x 10', 'Rainfall / 2']
-            user_norm = [n_in, p_in, k_in, temp_in * 2.5, hum_in, ph_in * 10, rain_in / 2]
-            ideal_norm = [ideal['N'], ideal['P'], ideal['K'], ideal['temperature'] * 2.5, ideal['humidity'], ideal['ph'] * 10, ideal['rainfall'] / 2]
-
-            fig_radar = go.Figure()
-            fig_radar.add_trace(go.Scatterpolar(r=user_norm, theta=cat, fill='toself', name='Current Soil Parameters', line_color='#06b6d4'))
-            fig_radar.add_trace(go.Scatterpolar(r=ideal_norm, theta=cat, fill='toself', name=f'Ideal {top3_crops[0].capitalize()} Profile', line_color='#10b981'))
-            fig_radar.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 200])), title=f"Soil Nutrient & Environmental Compatibility Envelope ({top3_crops[0].capitalize()})")
-            render_chart(fig_radar, height=450)
-        else:
-            st.error("Model file not found. Run python -m src.pipeline first.")
-
-# -------------------------------------------------------------
-# 6. ML MODEL EVALUATION ARENA
-# -------------------------------------------------------------
-elif page == '🤖 ML Model Arena':
-    st.subheader('🤖 Machine Learning Model Benchmarking & Explainable AI')
-    st.markdown('Inspect model evaluation metrics across Random Forest, K-Means Clustering, and Feature Importances.')
-
-    m_rf = metrics.get('random_forest', {})
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric('Classification Accuracy', f"{m_rf.get('accuracy', 0.993):.4f}", delta='Held-out Test')
-    c2.metric('Weighted F1 Score', f"{m_rf.get('f1_weighted', 0.993):.4f}")
-    c3.metric('Weighted Precision', f"{m_rf.get('precision_weighted', 0.993):.4f}")
-    c4.metric('Weighted Recall', f"{m_rf.get('recall_weighted', 0.993):.4f}")
-
-    col_l, col_r = st.columns([1, 1])
-    with col_l:
-        st.markdown('##### 🔍 Random Forest Feature Importance (Explainable AI)')
-        model_path = OUT / 'models/random_forest.joblib'
-        if model_path.exists():
-            pkg = joblib.load(model_path)
-            imp_df = pd.DataFrame({
-                'Feature': ['Rainfall', 'Humidity', 'Potassium (K)', 'Phosphorus (P)', 'Nitrogen (N)', 'Temperature', 'Soil pH'],
-                'Importance Score (%)': [23.03, 21.87, 17.60, 14.56, 10.53, 7.04, 5.35]
-            }).sort_values('Importance Score (%)', ascending=True)
-
-            fig_imp = px.bar(
-                imp_df,
-                x='Importance Score (%)',
-                y='Feature',
-                orientation='h',
-                color='Importance Score (%)',
-                color_continuous_scale='Greens'
-            )
-            render_chart(fig_imp, height=420)
-
-    with col_r:
-        st.markdown('##### 🎯 Held-out Confusion Matrix')
-        img = OUT / 'figures/confusion_matrix.png'
-        if img.exists():
-            st.image(str(img), use_container_width=True)
-
-# -------------------------------------------------------------
-# 7. SOIL & NUTRIENT ANALYTICS
-# -------------------------------------------------------------
-elif page == '🧪 Soil & Nutrient Analytics':
-    st.subheader('🧪 Soil Nutrient & Biochemical Distribution')
-    sel_feat = st.selectbox('Select Soil Variable', ['N', 'P', 'K', 'ph', 'rainfall', 'humidity', 'temperature'])
-    fig = px.histogram(
-        rec,
-        x=sel_feat,
-        color='label',
-        nbins=35,
-        title=f'{sel_feat} Distribution across Agricultural Crop Types',
-        color_discrete_sequence=px.colors.qualitative.Pastel
-    )
-    render_chart(fig, height=480)
-
-# -------------------------------------------------------------
-# 8. CROP YIELD & SEASONAL ANALYSIS
-# -------------------------------------------------------------
-elif page == '📈 Crop Yield & Seasonal Trends':
-    st.subheader('📈 Regional Crop Yield per Hectare & Seasonal Variations')
-    filtered = prod.dropna(subset=['Yield per Area']).query('`Yield per Area` < `Yield per Area`.quantile(0.98)')
-    fig = px.box(
-        filtered,
-        x='Season',
-        y='Yield per Area',
-        color='Season',
-        title='Seasonal Yield Variations (Metric Tons / Hectare)',
-        color_discrete_sequence=['#10b981', '#06b6d4', '#f59e0b', '#ec4899', '#8b5cf6']
-    )
-    render_chart(fig, height=480)
-
-# -------------------------------------------------------------
-# 9. K-MEANS PATTERN CLUSTERS
-# -------------------------------------------------------------
-elif page == '🧬 K-Means Pattern Clusters':
-    st.subheader('🧬 Unsupervised K-Means Soil & Environmental Clusters')
-    f_clust = OUT / 'tables/recommendation_clusters.parquet'
-    df_c = pd.read_parquet(f_clust) if f_clust.exists() else rec
-    fig = px.scatter(
-        df_c,
-        x='rainfall',
-        y='temperature',
-        color='cluster',
-        size='humidity',
-        hover_data=['label'],
-        title='5 Distinct Agricultural Soil-Climate Clusters',
-        color_continuous_scale='Turbo'
-    )
-    render_chart(fig, height=480)
-    cols = [c for c in ['n', 'p', 'k', 'N', 'P', 'K', 'temperature', 'humidity', 'ph', 'rainfall'] if c in df_c.columns]
-    st.dataframe(df_c.groupby('cluster')[cols].mean().round(2), use_container_width=True)
 
 # -------------------------------------------------------------
 # 10. DISTRIBUTED ARCHITECTURE & HDFS
